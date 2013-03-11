@@ -1,9 +1,9 @@
 {
-  "name": "DevtoolsBridge",
+  "name": "Devtools-Bridge",
   "version": "0.1",
   "description": "Template for building Chrome devtools panel window that communicates with currently loaded web pages.",
-  "devtools_page": "lib/devtools.html",
   "manifest_version": 2,
+  "devtools_page": "lib/devtools.html",
   "permissions": [
     "tabs",
     "<all_urls>"

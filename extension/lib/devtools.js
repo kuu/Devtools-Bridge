@@ -1,3 +1,7 @@
+// Defines the global variable for this library.
+// Note that the function is called in two contexts.
+//  First, called from the code injected into the web page.
+//  Then called from the listener for panel.onShow().
 function defineGlobalObject (global) {
   var myDevtools = global.devtoolsBridge;
 
@@ -19,12 +23,26 @@ function defineGlobalObject (global) {
   };
 }
 
+// Reads the config file.
 var config = configApp();
 
+// Loads the script files defined in the config file.
+var tHead = document.getElementsByTagName('head')[0];
+var tPanelScripts = config.panelScripts;
+if (tPanelScripts) {
+  for (var i = 0, il = tPanelScripts.length; i < il; i++) {
+    var tScript = document.createElement('script');
+    tScript.type= 'text/javascript';
+    tScript.src= '../' + tPanelScripts[i];
+    tHead.appendChild(tScript);
+  }
+}
+
+// Creates an extension panel.
 chrome.devtools.panels.create(
-  config.panelName || 'DevtoolsBridge',
-  '../' + (config.panelIconPath || 'img/icon.png'),
-  '../' + (config.panelHtmlPath || 'app/index.html'),
+  config.panelName || 'Devtools-Bridge',
+  config.panelIconPath || 'sample/img/icon.png',
+  config.panelHtmlPath || 'sample/index.html',
   function (pPanel) {
 
     var mInitialized = false;
