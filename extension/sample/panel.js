@@ -9,6 +9,7 @@ function registerPanelListeners(global) {
   var document = global.document;
   var button = document.getElementsByTagName('button')[0];
   var result = document.getElementById('result');
+  var windowInfo = {};
 
   /* 
    * global.devtoolsBridge.on
@@ -26,6 +27,10 @@ function registerPanelListeners(global) {
     button.addEventListener('click', function () {
       sendEvent('jqcheck', null, event.id);
     }, false);
+    windowInfo[event.id + ''] = {
+      title: event.title,
+      url: event.url
+    };
   });
 
   myPanel.on('jqcheck', function (event, sendEvent) {
@@ -36,7 +41,9 @@ function registerPanelListeners(global) {
       div.id = idStr;
       result.appendChild(div);
     }
-    div.innerHTML = '[windowId=' + event.id + ' : ' + event.url  + '](' + event.title + ')<br> => jQuery is ' + (event.data ? 'used.' : 'not used.');
+    var url = windowInfo[event.id + ''].url;
+    var title = windowInfo[event.id + ''].title;
+    div.innerHTML = '[windowId=' + event.id + ' : ' + url  + '](' + title + ')<br> => jQuery is ' + (event.data ? 'used.' : 'not used.');
   });
 
   
