@@ -24,13 +24,19 @@ function registerPanelListeners(global) {
    */
   myPanel.on('load', function (event, sendEvent) {
     button.addEventListener('click', function () {
-      alert('click');
-      sendEvent('jqcheck');
+      sendEvent('jqcheck', null, event.id);
     }, false);
   });
 
   myPanel.on('jqcheck', function (event, sendEvent) {
-    result.innerHTML = '[windowId=' + event.id + '] jQuery is ' + (event.data ? 'used.' : 'not used.');
+    var idStr = 'result-' + event.id;
+    var div = document.getElementById(idStr);
+    if (!div) {
+      div = document.createElement('div');
+      div.id = idStr;
+      result.appendChild(div);
+    }
+    div.innerHTML = '[windowId=' + event.id + ' : ' + event.url  + '](' + event.title + ')<br> => jQuery is ' + (event.data ? 'used.' : 'not used.');
   });
 
   

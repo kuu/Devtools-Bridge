@@ -64,11 +64,13 @@ chrome.devtools.panels.create(
       var doPostMessage = function (pType, pParams, pId) {
         var tData = {
           from: 'devtools', 
-          id: pId || 0,
+          id: (pId || 0),
           type: pType
         };
-        for (var k in pParams) {
-          tData[k] = pParams[k];
+        if (pParams) {
+          for (var k in pParams) {
+            tData[k] = pParams[k];
+          }
         }
         mPort.postMessage(tData);
       };
@@ -82,6 +84,7 @@ chrome.devtools.panels.create(
           };
         } else if (pMsg.type === 'load') {
           mWindowData[pMsg.id].state = 'loaded';
+          mWindowData[pMsg.id].title = pMsg.title;
         }
         var response = pMsg.data;
         var tListener = window.devtoolsBridge.listeners[pMsg.type];
@@ -105,25 +108,27 @@ chrome.devtools.panels.create(
           topLevelWindowPrivObj = global.top.devtoolsPanelBoilerplace = {windowNum: 0};
         }
         privObj.windowId = topLevelWindowPrivObj.windowNum++;
-        console.log('#### Script injected. windowId = ' + privObj.windowId);
 
         // A unitility function to post a message to the devtools panel.
         var doPostMessage = function (pType, pParams) {
           var tData = {
             from: 'webpage', 
             id: privObj.windowId,
+            url: (global.document ? global.document.URL : null),
+            title: (global.document ? global.document.title : null),
             type: pType
           };
           for (var k in pParams) {
             tData[k] = pParams[k];
           }
+          console.log('[Web page] sending a message to the devtools panel.', tData);
           global.postMessage(JSON.stringify(tData), '*');
         };
 
-        // Notify the devtools panel that the script is injected.
+        // Notify the devtools panel that the script has been injected.
         doPostMessage('injected');
 
-        // Notify the devtools panel that the web page is loaded.
+        // Notify the devtools panel that the web page has been loaded.
         global.onload = function () {
           doPostMessage('load');
         };
