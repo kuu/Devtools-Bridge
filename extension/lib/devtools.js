@@ -54,7 +54,7 @@ chrome.devtools.panels.create(
       }
 
       defineGlobalObject(window);
-      registerPanelListeners(window);
+      registerPanelListeners(window, pPanel);
 
       // Establishes a connection with the background page.
       var mPort = chrome.extension.connect();

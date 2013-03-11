@@ -30,7 +30,7 @@ function configApp() {
      * Array of the path of the JavaScript files used by the panel relative to the extension directory.
      * Note that the files will be loaded in the order listed here.
      * Please see the sample files to learn how to write event handlers for communication between the devtools panel and web pages.
-     * @default 'sample/index.html'
+     * @default []
      */
     panelScripts: [
       'sample/panel.js',
