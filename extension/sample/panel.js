@@ -25,25 +25,26 @@ function registerPanelListeners(global) {
    */
   myPanel.on('load', function (event, sendEvent) {
     button.addEventListener('click', function () {
-      sendEvent('jqcheck', null, event.id);
+      sendEvent('jqcheck', null, event.session);
     }, false);
-    windowInfo[event.id + ''] = {
-      title: event.title,
-      url: event.url
+    windowInfo[event.session + ''] = {
+      url: event.session,
+      title: event.title
     };
   });
 
   myPanel.on('jqcheck', function (event, sendEvent) {
-    var idStr = 'result-' + event.id;
+    var sessionStr = event.session + '';
+    var idStr = 'result-' + sessionStr;
     var div = document.getElementById(idStr);
     if (!div) {
       div = document.createElement('div');
       div.id = idStr;
       result.appendChild(div);
     }
-    var url = windowInfo[event.id + ''].url;
-    var title = windowInfo[event.id + ''].title;
-    div.innerHTML = '[windowId=' + event.id + ' : ' + url  + '](' + title + ')<br> => jQuery is ' + (event.data ? 'used.' : 'not used.');
+    var url = windowInfo[sessionStr].url;
+    var title = windowInfo[sessionStr].title;
+    div.innerHTML = '==========<br>URL:<br> => ' + url + '<br>----------<br>Title:<br> => "' + title + '"<br>----------<br> => jQuery is ' + (event.data ? 'used.' : 'not used.');
   });
 
   
