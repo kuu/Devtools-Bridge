@@ -84,7 +84,13 @@ chrome.devtools.panels.create(
             state: 'preloaded'
           };
         } else if (pMsg.type === 'load') {
-          mWindowData[pMsg.session].state = 'loaded';
+          if (mWindowData[pMsg.session]) {
+            mWindowData[pMsg.session].state = 'loaded';
+          } else {
+            mWindowData[pMsg.session] = {
+              state: 'loaded'
+            };
+          }
         }
         var response = pMsg.data;
         var tListener = window.devtoolsBridge.listeners[pMsg.type];
